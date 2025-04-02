@@ -13,5 +13,28 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Print Hello
-        run: echo "Hello, this is SPETSNAZ, the build job running in GitHub Actions!"
+      - name: Set up Java (if required)
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: Build Project
+        run: |
+          # Replace with your project's build command.
+          ./gradlew build
+
+      - name: Run Tests
+        run: |
+          # Replace with your project's test command.
+          ./gradlew test
+
+      - name: Run SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=sqp_48420f771061ba3b33149ac740ed191dc913f63e \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=$SONAR_TOKEN
+
