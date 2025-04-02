@@ -38,3 +38,29 @@ jobs:
             -Dsonar.host.url=http://localhost:9000 \
             -Dsonar.login=$SONAR_TOKEN
 
+ deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./terraform
+        run: terraform apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AKIAZVMTVJNVMKCKMKPN }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.zKB77eNJN/jxPJOzjsGemJMuQwbnugPv0+TtQNo8 }}
+          AWS_DEFAULT_REGION: "us-east-1"
+
